@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/all"
+            android:enabled="true"
+            android:title="@string/all" />
+        <item
+            android:id="@+id/increasing"
+            android:title="@string/increasing" />
+        <item
+            android:id="@+id/decreasing"
+            android:title="@string/decreasing" />
+
+        <item android:title="@string/menu_group_volume">
+            <menu>
+                <item
+                    android:id="@+id/volume30"
+                    android:title="@string/volume_30" />
+                <item
+                    android:id="@+id/volume50"
+                    android:title="@string/volume_50" />
+                <item
+                    android:id="@+id/volume100"
+                    android:title="@string/volume_100" />
+            </menu>
+        </item>
+    </group>
+</menu>

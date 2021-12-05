@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">VeriIMKB</string>
+    <string name="nav_header_title">VERIPARK</string>
+    <string name="nav_header_subtitle">IMKB Hisse Senetleri/Endeksler</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="all">Hisse ve Endeksler</string>
+    <string name="increasing">Yükselenler</string>
+    <string name="decreasing">Düşenler</string>
+    <string name="volume_30">IMKB-30</string>
+    <string name="volume_50">IMKB-50</string>
+    <string name="volume_100">IMKB-100</string>
+    <string name="bar_header">IMKB Hisse ve Endeksler</string>
+    <string name="symbol">Sembol</string>
+    <string name="price">Fiyat</string>
+    <string name="price2">Fiyat :</string>
+    <string name="difference">Fark</string>
+    <string name="difference2">% Fark :</string>
+    <string name="volume">Hacim</string>
+    <string name="volume2">Hacim : </string>
+    <string name="pid">Alış</string>
+    <string name="isUp">Değişim</string>
+    <string name="isUp2">Değişim :</string>
+    <string name="offer">Satış</string>
+    <string name="offer2">Satış :</string>
+    <string name="lowest">Gunluk Dusuk :</string>
+    <string name="highest">Gunluk Yuksek :</string>
+    <string name="number">Adet :</string>
+    <string name="menu_group_volume">IMKB Hacme Göre</string>
+    <string name="search_hint_text">Search</string>
+    <string name="maximum">Tavan : </string>
+    <string name="minimum">Taban : </string>
+    <string name="bid">Alis :</string>
+</resources>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="stockDetailViewModel"
+            type="com.kseyko.veriimkb.ui.detail.DetailViewModel" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+
+            <TextView
+                android:id="@+id/sembol"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{ @string/symbol+` : ` + stockDetailViewModel.imkbDetailLiveData.data.symbol}"
+                app:layout_constraintEnd_toStartOf="@+id/gunluk_dusuk"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Sembol : HALKB" />
+
+            <TextView
+                android:id="@+id/gunluk_dusuk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{ @string/lowest + stockDetailViewModel.imkbDetailLiveData.data.lowest}"
+                android:textAlignment="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sembol"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/lowest" />
+
+            <TextView
+                android:id="@+id/fiyat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{ @string/price2 + stockDetailViewModel.imkbDetailLiveData.data.price}"
+                app:layout_constraintEnd_toStartOf="@+id/gunluk_yuksek"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sembol"
+                tools:text="@string/price" />
+
+            <TextView
+                android:id="@+id/gunluk_yuksek"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{ @string/highest + stockDetailViewModel.imkbDetailLiveData.data.highest}"
+                android:textAlignment="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fiyat"
+                app:layout_constraintTop_toBottomOf="@+id/gunluk_dusuk"
+                tools:text="@string/highest" />
+
+            <TextView
+                android:id="@+id/fark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/difference2 + stockDetailViewModel.imkbDetailLiveData.data.difference}"
+                app:layout_constraintEnd_toStartOf="@+id/adet"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fiyat"
+                tools:text="@string/difference2" />
+
+            <TextView
+                android:id="@+id/adet"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/number + stockDetailViewModel.imkbDetailLiveData.data.count}"
+                android:textAlignment="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fark"
+                app:layout_constraintTop_toBottomOf="@+id/gunluk_yuksek"
+                tools:text="@string/number" />
+
+            <TextView
+                android:id="@+id/hacim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/volume2 + stockDetailViewModel.imkbDetailLiveData.data.volume}"
+                app:layout_constraintEnd_toStartOf="@+id/tavan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fark"
+                tools:text="@string/volume2" />
+
+            <TextView
+                android:id="@+id/tavan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/maximum + stockDetailViewModel.imkbDetailLiveData.data.maximum}"
+                android:textAlignment="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/hacim"
+                app:layout_constraintTop_toBottomOf="@+id/adet"
+                tools:text="@string/maximum" />
+
+            <TextView
+                android:id="@+id/alis"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/bid + stockDetailViewModel.imkbDetailLiveData.data.bid}"
+                app:layout_constraintEnd_toStartOf="@+id/taban"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/hacim"
+                tools:text="@string/bid" />
+
+            <TextView
+                android:id="@+id/taban"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/minimum + stockDetailViewModel.imkbDetailLiveData.data.minimum}"
+                android:textAlignment="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/alis"
+                app:layout_constraintTop_toBottomOf="@+id/tavan"
+                tools:text="@string/minimum" />
+
+            <TextView
+                android:id="@+id/satis"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{@string/offer2 + stockDetailViewModel.imkbDetailLiveData.data.offer}"
+                app:layout_constraintEnd_toStartOf="@+id/degisim"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/alis"
+                tools:text="@string/offer2" />
+
+            <TextView
+                android:id="@+id/degisim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/isUp2"
+                android:textAlignment="textEnd"
+                app:layout_constraintEnd_toStartOf="@+id/isUp"
+                app:layout_constraintStart_toEndOf="@+id/satis"
+                app:layout_constraintTop_toBottomOf="@+id/taban" />
+
+            <ImageView
+                android:id="@+id/isUp"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/taban"
+                app:stockDown="@{stockDetailViewModel.imkbDetailLiveData.data.down}"
+                app:stockUp="@{stockDetailViewModel.imkbDetailLiveData.data.up}"
+                tools:src="@mipmap/ic_up" />
+
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/isUp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

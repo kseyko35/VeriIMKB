@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.kseyko.veriimkb.ui.home.HomeFragment"
+        android:label="@string/bar_header"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_home_to_nav_list"
+            app:destination="@id/nav_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_list"
+        android:name="com.kseyko.veriimkb.ui.list.ListFragment"
+        android:label="@string/bar_header"
+        tools:layout="@layout/fragment_list">
+        <action
+            android:id="@+id/action_nav_list_to_nav_detail"
+            app:destination="@id/nav_detail" />
+
+        <argument
+            android:name="period"
+            android:defaultValue="all"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nav_list_self"
+            app:destination="@id/nav_list"
+            app:launchSingleTop="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_detail"
+        android:name="com.kseyko.veriimkb.ui.detail.DetailFragment"
+        android:label="@string/bar_header"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_nav_detail_to_nav_list"
+            app:destination="@id/nav_list"
+            app:popUpTo="@id/nav_list"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>
