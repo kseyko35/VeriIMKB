@@ -6,9 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.kseyko.veriimkb.R
-import com.kseyko.veriimkb.data.model.stock.Stock
 import java.text.SimpleDateFormat
 
 
@@ -21,13 +19,13 @@ import java.text.SimpleDateFormat
 ║      26,November,2021      ║
 ╚════════════════════════════╝
  */
-@BindingAdapter("submitList")
-fun submitList(recyclerView: RecyclerView, list: List<Stock>?) {
-    recyclerView.adapter?.let {
-        val adapter = it as StockListAdapter
-        adapter.setStockList(list ?: listOf())
-    }
-}
+//@BindingAdapter("submitList")
+//fun submitList(recyclerView: RecyclerView, list: List<Stock>?) {
+//    recyclerView.adapter?.let {
+//        val adapter = it as StockListAdapter
+//        adapter.setStockList(list ?: listOf())
+//    }
+//}
 
 @BindingAdapter("stockUp", "stockDown", requireAll = false)
 fun ImageView.setImageChanges(stockUp: Boolean, stockDown: Boolean) {

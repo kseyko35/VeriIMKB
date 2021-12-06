@@ -45,11 +45,12 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewId = binding.root.id
         onPreInit(savedInstanceState)
         onInitView()
-        onInitListener()
         onObserverData()
+        onInitListener()
         clickHandling()
     }
 

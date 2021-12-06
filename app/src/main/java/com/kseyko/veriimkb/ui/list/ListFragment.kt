@@ -1,5 +1,6 @@
 package com.kseyko.veriimkb.ui.list
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -16,12 +17,10 @@ import com.kseyko.veriimkb.helper.Information
 import com.kseyko.veriimkb.ui.adapter.StockListAdapter
 import com.kseyko.veriimkb.ui.adapter.StockListener
 import com.kseyko.veriimkb.ui.base.BaseViewModelFragment
-import com.kseyko.veriimkb.utils.AESFunction.decrypt
 import com.kseyko.veriimkb.utils.AESFunction.encrypt
 import com.kseyko.veriimkb.utils.DataStoreHelper
 import com.kseyko.veriimkb.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -31,7 +30,7 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
     override val viewModel: ListViewModel by viewModels()
     private lateinit var handshakeResponse: HandshakeResponse
 
-    private var stockAdapter: StockListAdapter? = null
+    private lateinit var stockAdapter: StockListAdapter
 
     override fun getDataBinding(
         inflater: LayoutInflater,
@@ -41,14 +40,15 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
         return FragmentListBinding.inflate(inflater, container, false)
     }
 
-//    override fun onPreInit(savedInstanceState: Bundle?) {
-//        super.onPreInit(savedInstanceState)
-//        if (savedInstanceState==null){
-//            lifecycleScope.launchWhenStarted {
-//                viewModel.submitAuth(Information.getAuthInfo(requireContext()))
-//            }
-//        }
-//    }
+    override fun onPreInit(savedInstanceState: Bundle?) {
+        super.onPreInit(savedInstanceState)
+        if (savedInstanceState == null) {
+            lifecycleScope.launchWhenStarted {
+                fetchAuth()
+
+            }
+        }
+    }
 
     override fun onInitView() {
         super.onInitView()
@@ -57,8 +57,8 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
 //            lifecycleOwner = this@ListFragment
 //        }
         binding.stockRecycleView.setHasFixedSize(true)
-
-        viewModel.submitAuth(Information.getAuthInfo(requireContext()))
+        stockAdapter = StockListAdapter(this)
+//        fetchAuth()
 
     }
 
@@ -78,15 +78,23 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
 
     }
 
+    private fun fetchAuth() {
+        viewModel.submitAuth(Information.getAuthInfo(requireContext()))
+    }
+
     override fun onInitListener() {
         super.onInitListener()
         binding.stockSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                stockAdapter.filter.filter(query)
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                stockAdapter?.filter?.filter(newText)
+                if (newText == "") {
+                    stockAdapter.filter.filter(newText)
+                }
+
                 return false
             }
 
@@ -101,18 +109,20 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
 
     override fun onObserverData() {
         super.onObserverData()
-        viewModel.authLiveData.observe(this) {
+        viewModel.authLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data?.status?.isSuccess!!) {
                         handshakeResponse = it.data
-                        lifecycleScope.launch {
+                        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                             DataStoreHelper(requireContext()).dsSave(
                                 "handshakeResponse",
                                 it.data
                             )
                         }
                         fetchList()
+                    } else {
+                        fetchAuth()
                     }
                 }
                 Status.LOADING -> {
@@ -134,21 +144,13 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
                     hideLoading()
                     it.data?.let { listResponse ->
                         if (listResponse.status.isSuccess) {
-                            handshakeResponse.let {
-                                try {
-                                    for (stock in listResponse.stocks) {
-                                        stock.symbol = decrypt(
-                                            stock.symbol,
-                                            handshakeResponse.aesKey,
-                                            handshakeResponse.aesIV
-                                        )
-                                    }
-                                } catch (e: Exception) {
-                                    //TODO
-                                }
-                            }
-                            stockAdapter =
-                                StockListAdapter(listResponse.stocks as ArrayList<Stock>, this)
+                            stockAdapter.setList(
+                                listResponse.stocks,
+                                handshakeResponse.aesKey,
+                                handshakeResponse.aesIV
+                            )
+//                            stockAdapter =
+//                                StockListAdapter(listResponse.stocks as ArrayList<Stock>, this)
                             binding.stockRecycleView.adapter = stockAdapter
                         }
                     }

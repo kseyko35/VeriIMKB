@@ -10,6 +10,7 @@ import com.kseyko.veriimkb.R
 import com.kseyko.veriimkb.data.model.stock.Stock
 import com.kseyko.veriimkb.databinding.ItemStockListBinding
 import com.kseyko.veriimkb.ui.base.toBinding
+import com.kseyko.veriimkb.utils.AESFunction.decrypt
 import com.kseyko.veriimkb.utils.StockDiffUtil
 import java.util.*
 import kotlin.collections.ArrayList
@@ -25,12 +26,37 @@ import kotlin.collections.ArrayList
 ╚════════════════════════════╝
  */
 class StockListAdapter(
-    var stockList: ArrayList<Stock>,
+//    var stockList: ArrayList<Stock>,
     private val stockListener: StockListener
 ) : RecyclerView.Adapter<StockListAdapter.StockViewHolder>(), Filterable {
+    private var stockList = ArrayList<Stock>()
+    private var tempStockList = ArrayList<Stock>()
 
-    private var tempStockList = stockList
+    fun setList(stocks: List<Stock>, aesKey: String, aesIV: String) {
+        stockList.clear()
+        tempStockList.clear()
 
+        stocks.forEach {
+            stockList.add(
+                Stock(
+                    it.bid,
+                    it.difference,
+                    it.id,
+                    it.isDown,
+                    it.isUp,
+                    it.offer,
+                    it.price,
+                    decrypt(
+                        it.symbol,
+                        aesKey,
+                        aesIV
+                    ),
+                    it.volume
+                )
+            )
+        }
+        tempStockList.addAll(stockList)
+    }
     class StockViewHolder(private val binding: ItemStockListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
