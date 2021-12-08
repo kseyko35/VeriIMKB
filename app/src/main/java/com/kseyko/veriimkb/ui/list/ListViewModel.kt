@@ -23,10 +23,10 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(private val imkbRepository: ImkbRepository) :
     BaseViewModel() {
 
-    private var _imkbListLiveData = MutableLiveData<Resource<StockListResponse>>()
-    var imkbListLiveData: LiveData<Resource<StockListResponse>> = _imkbListLiveData
+    private val _imkbListLiveData = MutableLiveData<Resource<StockListResponse>>()
+    val imkbListLiveData: LiveData<Resource<StockListResponse>> = _imkbListLiveData
 
-    private var _authLiveData = MutableLiveData<Resource<HandshakeResponse>>()
+    private val _authLiveData = MutableLiveData<Resource<HandshakeResponse>>()
     val authLiveData: LiveData<Resource<HandshakeResponse>> = _authLiveData
 
     fun submitAuth(handshakeRequest: HandshakeRequest) {

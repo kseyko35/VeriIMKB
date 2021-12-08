@@ -26,13 +26,12 @@ import kotlin.collections.ArrayList
 ╚════════════════════════════╝
  */
 class StockListAdapter(
-//    var stockList: ArrayList<Stock>,
     private val stockListener: StockListener
 ) : RecyclerView.Adapter<StockListAdapter.StockViewHolder>(), Filterable {
     private var stockList = ArrayList<Stock>()
     private var tempStockList = ArrayList<Stock>()
 
-    fun setList(stocks: List<Stock>, aesKey: String, aesIV: String) {
+    fun setStockList(stocks: List<Stock>, aesKey: String, aesIV: String) {
         stockList.clear()
         tempStockList.clear()
 
@@ -62,7 +61,6 @@ class StockListAdapter(
         fun bind(
             item: Stock, listener: StockListener
         ) {
-
             binding.apply {
                 stockItem = item
                 stockListener = listener
@@ -80,12 +78,11 @@ class StockListAdapter(
             holder.itemView.setBackgroundColor(Color.WHITE)
         } else holder.itemView.setBackgroundResource(R.color.rowBckColor)
         holder.bind(tempStockList[position], stockListener)
-
     }
 
     override fun getItemCount(): Int = tempStockList.size
 
-    fun setStockList(newStockList: List<Stock>) {
+    fun updateStockList(newStockList: List<Stock>) {
         val diffUtil = StockDiffUtil(stockList, newStockList)
         val difResults = DiffUtil.calculateDiff(diffUtil)
         difResults.dispatchUpdatesTo(this)
@@ -113,10 +110,9 @@ class StockListAdapter(
                 return filterResults
             }
 
-            @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 tempStockList = results?.values as ArrayList<Stock>
-                setStockList(tempStockList)
+                updateStockList(tempStockList)
             }
 
         }

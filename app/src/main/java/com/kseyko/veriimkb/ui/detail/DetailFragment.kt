@@ -1,5 +1,6 @@
 package com.kseyko.veriimkb.ui.detail
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -35,6 +36,25 @@ class DetailFragment : BaseViewModelFragment<FragmentDetailBinding, DetailViewMo
         return FragmentDetailBinding.inflate(inflater, container, false)
     }
 
+    override fun onPreInit(savedInstanceState: Bundle?) {
+        super.onPreInit(savedInstanceState)
+        if (savedInstanceState == null) {
+            viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+                handshakeResponse = DataStoreHelper(requireContext()).dsGet(
+                    "handshakeResponse",
+                    HandshakeResponse::class.java
+                )
+                handshakeResponse.let {
+                    stockListRequest = getDetailInfo(
+                        args.id.toString(),
+                        it.aesKey,
+                        it.aesIV
+                    )
+                }
+                fetchList()
+            }
+        }
+    }
 
     override fun onInitView() {
         super.onInitView()
@@ -43,20 +63,7 @@ class DetailFragment : BaseViewModelFragment<FragmentDetailBinding, DetailViewMo
             lifecycleOwner = this@DetailFragment
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            handshakeResponse = DataStoreHelper(requireContext()).dsGet(
-                "handshakeResponse",
-                HandshakeResponse::class.java
-            )
-            handshakeResponse.let {
-                stockListRequest = getDetailInfo(
-                    args.id.toString(),
-                    handshakeResponse.aesKey,
-                    handshakeResponse.aesIV
-                )
-            }
-            fetchList()
-        }
+
     }
 
     private fun fetchList() {
@@ -71,7 +78,7 @@ class DetailFragment : BaseViewModelFragment<FragmentDetailBinding, DetailViewMo
     override fun onObserverData() {
         super.onObserverData()
         val entries = ArrayList<Entry>()
-        viewModel.imkbDetailLiveData.observe(viewLifecycleOwner, { it ->
+        viewModel.imkbDetailLiveData.observe(viewLifecycleOwner) { it ->
             when (it.status) {
                 Status.SUCCESS -> {
                     hideLoading()
@@ -118,7 +125,7 @@ class DetailFragment : BaseViewModelFragment<FragmentDetailBinding, DetailViewMo
                     ).show()
                 }
             }
-        })
+        }
     }
 
 

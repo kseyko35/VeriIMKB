@@ -29,7 +29,6 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
     private val args by navArgs<ListFragmentArgs>()
     override val viewModel: ListViewModel by viewModels()
     private lateinit var handshakeResponse: HandshakeResponse
-
     private lateinit var stockAdapter: StockListAdapter
 
     override fun getDataBinding(
@@ -52,14 +51,15 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
 
     override fun onInitView() {
         super.onInitView()
-//        binding.apply {
-//            stockListViewModel = this@ListFragment.viewModel
-//            lifecycleOwner = this@ListFragment
-//        }
-        binding.stockRecycleView.setHasFixedSize(true)
         stockAdapter = StockListAdapter(this)
-//        fetchAuth()
-
+        binding.apply {
+            stockListViewModel = this@ListFragment.viewModel
+            lifecycleOwner = this@ListFragment
+        }
+        binding.stockRecycleView.apply {
+            setHasFixedSize(true)
+            adapter = stockAdapter
+        }
     }
 
     private fun fetchList() {
@@ -91,16 +91,14 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText == "") {
+                if (newText != "") {
                     stockAdapter.filter.filter(newText)
                 }
-
                 return false
             }
 
         })
         binding.swipeRefreshLayout.setOnRefreshListener {
-            binding.stockSearch.setQuery("", false)
             binding.stockSearch.clearFocus()
             fetchList()
         }
@@ -121,8 +119,6 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
                             )
                         }
                         fetchList()
-                    } else {
-                        fetchAuth()
                     }
                 }
                 Status.LOADING -> {
@@ -144,14 +140,13 @@ class ListFragment : BaseViewModelFragment<FragmentListBinding, ListViewModel>()
                     hideLoading()
                     it.data?.let { listResponse ->
                         if (listResponse.status.isSuccess) {
-                            stockAdapter.setList(
+                            stockAdapter.setStockList(
                                 listResponse.stocks,
                                 handshakeResponse.aesKey,
                                 handshakeResponse.aesIV
                             )
-//                            stockAdapter =
-//                                StockListAdapter(listResponse.stocks as ArrayList<Stock>, this)
-                            binding.stockRecycleView.adapter = stockAdapter
+                        } else {
+                            fetchAuth()
                         }
                     }
                     binding.swipeRefreshLayout.isRefreshing = false

@@ -1,13 +1,11 @@
 package com.kseyko.veriimkb.ui.adapter
 
-import android.os.Build
-import android.text.Html
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.kseyko.veriimkb.R
-import java.text.SimpleDateFormat
+import com.kseyko.veriimkb.data.model.stock.Stock
 
 
 /**     Code with ❤
@@ -19,13 +17,13 @@ import java.text.SimpleDateFormat
 ║      26,November,2021      ║
 ╚════════════════════════════╝
  */
-//@BindingAdapter("submitList")
-//fun submitList(recyclerView: RecyclerView, list: List<Stock>?) {
-//    recyclerView.adapter?.let {
-//        val adapter = it as StockListAdapter
-//        adapter.setStockList(list ?: listOf())
-//    }
-//}
+@BindingAdapter("submitList")
+fun submitList(recyclerView: RecyclerView, list: List<Stock>?) {
+    recyclerView.adapter?.let {
+        it as StockListAdapter
+        it.updateStockList(list ?: listOf())
+    }
+}
 
 @BindingAdapter("stockUp", "stockDown", requireAll = false)
 fun ImageView.setImageChanges(stockUp: Boolean, stockDown: Boolean) {
@@ -33,23 +31,6 @@ fun ImageView.setImageChanges(stockUp: Boolean, stockDown: Boolean) {
         stockUp -> setImageResource(R.mipmap.ic_up)
         stockDown -> setImageResource(R.mipmap.ic_down)
         else -> setImageResource(R.mipmap.ic_stable)
-    }
-}
-
-@BindingAdapter("com.kseyko.veriimkb.ui.adapter.setTextWithHtml")
-fun setTextWithHtml(textView: TextView, text: String) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        textView.text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        textView.text = Html.fromHtml(text)
-    }
-}
-
-@BindingAdapter("com.kseyko.veriimkb.ui.adapter.formatDate")
-fun formatDate(textView: TextView, firstFlight: String?) {
-    firstFlight?.let {
-        val date = SimpleDateFormat("yyyy-MM-dd").parse(firstFlight)
-        textView.text = SimpleDateFormat("dd.MM.yyyy").format(date)
     }
 }
 

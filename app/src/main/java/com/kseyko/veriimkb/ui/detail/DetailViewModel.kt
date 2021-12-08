@@ -20,8 +20,8 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(private val repository: ImkbRepository) :
     BaseViewModel() {
 
-    private var _imkbDetailLiveData = MutableLiveData<Resource<StockDetailResponse>>()
-    var imkbDetailLiveData: LiveData<Resource<StockDetailResponse>> = _imkbDetailLiveData
+    private val _imkbDetailLiveData = MutableLiveData<Resource<StockDetailResponse>>()
+    val imkbDetailLiveData: LiveData<Resource<StockDetailResponse>> = _imkbDetailLiveData
 
     fun submitDetail(XVPAuthorization: String, detailRequest: StockDetailRequest) {
         viewModelScope.launch(Dispatchers.IO) {
